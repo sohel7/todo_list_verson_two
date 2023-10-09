@@ -1,4 +1,7 @@
 import 'package:flutter/Material.dart';
+import 'package:todo_list_verson_two/update_modal.dart';
+
+import 'add_new_task_modal.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,14 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
      floatingActionButton: FloatingActionButton(
        onPressed: (){
-         showModalBottomSheet(context: context, builder: (contex){
-          return Column(
-            children: [
-             TextFormField(),
-              SizedBox(height: 16.0),
-              ElevatedButton(onPressed: (){}, child: Text('Add'))
-            ],
-          );
+         showModalBottomSheet(
+             context: context,
+             builder: (contex){
+          return const AddOrUpdateTaskModal();
          });
        },
        child: Icon(Icons.add),
@@ -51,6 +50,39 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: 10,
           itemBuilder: (context, index){
           return  ListTile(
+            onTap: (){
+              showDialog(context: context, builder: (context){
+              return   AlertDialog(
+                title: Text('Actions'),
+               content: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text('Edit'),
+                   // onTap: (){ },
+                  ),
+                  Divider(height: 0,),
+                  ListTile(
+                    leading: Icon(Icons.delete_outline),
+                    title: Text('Delete'),
+                  //  onTap: (){},
+                  ),
+                  Divider(height: 0,),
+                  ListTile(
+                    leading: Icon(Icons.update),
+                    title: Text('Update'),
+                     onTap: (){
+                      Navigator.pop(context);
+                      showModalBottomSheet(context: context, builder: (context){
+                        return UpdateTaskModal();
+                      });
+                     },
+                  )
+                ],
+              ),
+               );
+              });
+            },
             leading: CircleAvatar(
               child: Text('${index + 1}'),
             ),
@@ -67,3 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
+
